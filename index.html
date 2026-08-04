@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Catalog</title>
+    <style>
+        /* Desain & Tata Letak Dasar */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* -------------------------------------------------- */
+        /* LOGIKA SYSTEM HALAMAN & FILTER (PURE CSS)          */
+        /* -------------------------------------------------- */
+        input.radio-switch {
+            display: none;
+        }
+
+        /* TAMPILAN 1: Halaman Katalog Utama */
+        .page-katalog {
+            display: block;
+        }
+
+        /* TAMPILAN 2: Semua Halaman Detail disembunyikan secara default */
+        .page-detail {
+            display: none;
+        }
+
+        /* SEMBUNYIKAN HEADER & KATALOG SAAT MASUK HALAMAN DETAIL */
+        #page-hyperion:checked ~ header,
+        #page-hyprphantom:checked ~ header,
+        #page-glitter:checked ~ header,
+        #page-twincore:checked ~ header,
+        #page-silencex1:checked ~ header,
+        #page-silencex2:checked ~ header,
+        #page-dandelion:checked ~ header,
+        #page-silencep1:checked ~ header,
+        #page-silencep2:checked ~ header {
+            display: none !important; /* Hilangkan Header Device Category */
+        }
+
+        #page-hyperion:checked ~ .page-katalog,
+        #page-hyprphantom:checked ~ .page-katalog,
+        #page-glitter:checked ~ .page-katalog,
+        #page-twincore:checked ~ .page-katalog,
+        #page-silencex1:checked ~ .page-katalog,
+        #page-silencex2:checked ~ .page-katalog,
+        #page-dandelion:checked ~ .page-katalog,
+        #page-silencep1:checked ~ .page-katalog,
+        #page-silencep2:checked ~ .page-katalog {
+            display: none !important; /* Sembunyikan Katalog Utama */
+        }
+
+        /* Tampilkan masing-masing halaman detail penuh */
+        #page-hyperion:checked ~ #detail-hyperion,
+        #page-hyprphantom:checked ~ #detail-hyprphantom,
+        #page-glitter:checked ~ #detail-glitter,
+        #page-twincore:checked ~ #detail-twincore,
+        #page-silencex1:checked ~ #detail-silencex1,
+        #page-silencex2:checked ~ #detail-silencex2,
+        #page-dandelion:checked ~ #detail-dandelion,
+        #page-silencep1:checked ~ #detail-silencep1,
+        #page-silencep2:checked ~ #detail-silencep2 {
+            display: block !important; /* Tampilkan Detail Penuh */
+        }
+
+        /* LOGIKA FILTER KATEGORI KATALOG */
+        #tab-x86:checked ~ .page-katalog #hp {
+            display: none !important;
+        }
+        #tab-arm:checked ~ .page-katalog #laptop {
+            display: none !important;
+        }
+
+        #tab-semua:checked ~ header nav .lbl-semua,
+        #tab-x86:checked ~ header nav .lbl-x86,
+        #tab-arm:checked ~ header nav .lbl-arm {
+            background-color: #007bff;
+        }
+
+        /* -------------------------------------------------- */
+        /* HEADER & NAVIGASI                                  */
+        /* -------------------------------------------------- */
+        header {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        header h1 { margin: 0; font-size: 24px; padding-bottom: 10px; }
+        
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav label.nav-btn {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+            background-color: #333;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+        }
+        nav label.nav-btn:hover {
+            background-color: #007bff;
+        }
+
+        /* KONTAINER & GRID KATALOG */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            min-height: 65vh;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+            padding-top: 20px;
+        }
+        .category-title {
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 30px 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        .card h3 { margin: 0 0 10px 0; font-size: 1.3rem; color: #1a1a1a; }
+        .card p { color: #666; font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
+        
+        .btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            width: 80%;
+            font-weight: bold;
+            transition: 0.2s;
+            margin: 0 auto;
+            text-align: center;
+            user-select: none;
+        }
+        .btn:hover { background-color: #218838; }
+
+        /* -------------------------------------------------- */
+        /* DESAIN FULL HALAMAN BARU (DETAIL VIEW)             */
+        /* -------------------------------------------------- */
+        .detail-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            padding: 40px 30px;
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .detail-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+
+        /* Teks deskripsi bersih tanpa garis/kotak biru */
+        .info-content h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+        }
+
+        .info-content p {
+            margin: 0;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .btn-kembali {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+        .btn-kembali:hover { background-color: #5a6268; }
+
+        /* FOOTER */
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONTROL PINDAH HALAMAN (PAGE SWITCH) -->
+    <input type="radio" id="view-katalog" name="page-switch" class="radio-switch" checked>
+    <input type="radio" id="page-hyperion" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-hyprphantom" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-glitter" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-twincore" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-silencex1" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-silencex2" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-dandelion" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-silencep1" name="page-switch" class="radio-switch">
+    <input type="radio" id="page-silencep2" name="page-switch" class="radio-switch">
+
+    <!-- CONTROL FILTER KATEGORI KATALOG -->
+    <input type="radio" id="tab-semua" name="kategori" class="radio-switch" checked>
+    <input type="radio" id="tab-x86" name="kategori" class="radio-switch">
+    <input type="radio" id="tab-arm" name="kategori" class="radio-switch">
+
+    <header>
+        <h1>Device Category</h1>
+        <nav>
+            <ul>
+                <li><label for="tab-semua" class="nav-btn lbl-semua">Semua</label></li>
+                <li><label for="tab-x86" class="nav-btn lbl-x86">X86</label></li>
+                <li><label for="tab-arm" class="nav-btn lbl-arm">ARM</label></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ==================================================== -->
+    <!-- TAMPILAN 1: HALAMAN UTAMA / KATALOG PRODUK           -->
+    <!-- ==================================================== -->
+    <div class="container page-katalog">
+        
+        <!-- KATEGORI 1: X86 -->
+        <section id="laptop" class="category-section">
+            <h2 class="category-title">Kategori: X86</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Hyperion</h3>
+                    <p>Desktop Computer</p>
+                    <label for="page-hyperion" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>HyprPhantom</h3>
+                    <p>Laptop</p>
+                    <label for="page-hyprphantom" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>Glitter</h3>
+                    <p>NGGR</p>
+                    <label for="page-glitter" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>Twin Core</h3>
+                    <p>Retro</p>
+                    <label for="page-twincore" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>SilenceX1</h3>
+                    <p>Silence</p>
+                    <label for="page-silencex1" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>SilenceX2</h3>
+                    <p>Silence</p>
+                    <label for="page-silencex2" class="btn">Lanjutkan</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORI 2: ARM -->
+        <section id="hp" class="category-section">
+            <h2 class="category-title">Kategori: ARM</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Dandelion</h3>
+                    <p>Redmi 10A</p>
+                    <label for="page-dandelion" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>SilenceP1</h3>
+                    <p>ARM version</p>
+                    <label for="page-silencep1" class="btn">Lanjutkan</label>
+                </div>
+                <div class="card">
+                    <h3>SilenceP2</h3>
+                    <p>VA</p>
+                    <label for="page-silencep2" class="btn">Lanjutkan</label>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- TAMPILAN 2: DAFTAR HALAMAN BARU / DETAIL PRODUK      -->
+    <!-- ==================================================== -->
+
+    <!-- Halaman Detail: Hyperion -->
+    <div class="container page-detail" id="detail-hyperion">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: X86</span>
+            <h2>Hyperion</h2>
+            <div class="subtitle">Tipe: Desktop Computer</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Hyperion adalah komputer desktop kelas profesional dengan performa arsitektur X86 yang tinggi. Dirancang untuk menangani beban kerja berat, pengolahan data masif, multitasking intensif, serta komputasi harian yang membutuhkan stabilitas maksimal.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: HyprPhantom -->
+    <div class="container page-detail" id="detail-hyprphantom">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: X86</span>
+            <h2>HyprPhantom</h2>
+            <div class="subtitle">Tipe: Laptop</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>HyprPhantom hadir dalam bentuk laptop ultra-portabel berbasis X86. Menawarkan keseimbangan sempurna antara mobilitas tinggi, efisiensi daya, dan kemampuan pemrosesan yang tangguh untuk mendukung produktivitas Anda di mana saja.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: Glitter -->
+    <div class="container page-detail" id="detail-glitter">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: X86</span>
+            <h2>Glitter</h2>
+            <div class="subtitle">Tipe: NGGR</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Perangkat Next-Gen (NGGR) berbasis X86 yang mengedepankan kecepatan eksekusi tinggi, efisiensi render grafis, serta fleksibilitas konektivitas tingkat lanjut.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: Twin Core -->
+    <div class="container page-detail" id="detail-twincore">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: X86</span>
+            <h2>Twin Core</h2>
+            <div class="subtitle">Tipe: Retro</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Sistem arsitektur dual-core X86 klasik yang sangat stabil. Sangat cocok digunakan untuk menjalankan sistem operasi legacy, emulator retro, atau tugas-tugas komputasi mendasar yang membutuhkan konsistensi tanpa gangguan.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: SilenceX1 -->
+    <div class="container page-detail" id="detail-silencex1">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: X86</span>
+            <h2>SilenceX1</h2>
+            <div class="subtitle">Tipe: Silence</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Perangkat PC Fanless (tanpa kipas) berbasis X86 generasi pertama. Dilengkapi dengan pendinginan pasif tingkat tinggi untuk pengoperasian yang 100% hening dan bebas kebisingan suara kipas.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: SilenceX2 -->
+    <div class="container page-detail" id="detail-silencex2">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: X86</span>
+            <h2>SilenceX2</h2>
+            <div class="subtitle">Tipe: Silence</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Peningkatan dari seri SilenceX1, membawa arsitektur X86 yang lebih bertenaga namun tetap mengusung sistem *silent cooling* pasif untuk menciptakan lingkungan kerja yang hening total.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: Dandelion -->
+    <div class="container page-detail" id="detail-dandelion">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: ARM</span>
+            <h2>Dandelion</h2>
+            <div class="subtitle">Tipe: Redmi 10A</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Perangkat seluler berbasis SoC ARM (Redmi 10A). Mengutamakan efisiensi konsumsi baterai harian, layar besar, dan kapabilitas aplikasi mobile yang ringan serta stabil.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: SilenceP1 -->
+    <div class="container page-detail" id="detail-silencep1">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: ARM</span>
+            <h2>SilenceP1</h2>
+            <div class="subtitle">Tipe: ARM version</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Perangkat arsitektur ARM hemat energi tingkat lanjut. Menghasilkan suhu kerja yang sangat dingin dan penggunaan daya minimal untuk aktivitas komputasi seluler berdurasi panjang.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail: SilenceP2 -->
+    <div class="container page-detail" id="detail-silencep2">
+        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
+        <div class="detail-card">
+            <span class="badge">Arsitektur: ARM</span>
+            <h2>SilenceP2</h2>
+            <div class="subtitle">Tipe: VA</div>
+            <div class="info-content">
+                <h4>Deskripsi & Spesifikasi Produk</h4>
+                <p>Perangkat ARM generasi terbaru bertipe VA yang menyajikan pengolahan visual lebih responsif, instruksi data hemat daya, dan performa yang sangat dapat diandalkan.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Device. Noveau.</p>
+    </footer>
+
+</body>
+  </html>
+  
