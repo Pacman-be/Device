@@ -3,494 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Catalog</title>
-    <style>
-        /* Desain & Tata Letak Dasar */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f6;
-            color: #333;
-        }
-
-        /* -------------------------------------------------- */
-        /* LOGIKA SYSTEM HALAMAN & FILTER (PURE CSS)          */
-        /* -------------------------------------------------- */
-        input.radio-switch {
-            display: none;
-        }
-
-        /* TAMPILAN 1: Halaman Katalog Utama */
-        .page-katalog {
-            display: block;
-        }
-
-        /* TAMPILAN 2: Semua Halaman Detail disembunyikan secara default */
-        .page-detail {
-            display: none;
-        }
-
-        /* SEMBUNYIKAN HEADER & KATALOG SAAT MASUK HALAMAN DETAIL */
-        #page-hyperion:checked ~ header,
-        #page-hyprphantom:checked ~ header,
-        #page-glitter:checked ~ header,
-        #page-twincore:checked ~ header,
-        #page-silencex1:checked ~ header,
-        #page-silencex2:checked ~ header,
-        #page-dandelion:checked ~ header,
-        #page-silencep1:checked ~ header,
-        #page-silencep2:checked ~ header {
-            display: none !important; /* Hilangkan Header Device Category */
-        }
-
-        #page-hyperion:checked ~ .page-katalog,
-        #page-hyprphantom:checked ~ .page-katalog,
-        #page-glitter:checked ~ .page-katalog,
-        #page-twincore:checked ~ .page-katalog,
-        #page-silencex1:checked ~ .page-katalog,
-        #page-silencex2:checked ~ .page-katalog,
-        #page-dandelion:checked ~ .page-katalog,
-        #page-silencep1:checked ~ .page-katalog,
-        #page-silencep2:checked ~ .page-katalog {
-            display: none !important; /* Sembunyikan Katalog Utama */
-        }
-
-        /* Tampilkan masing-masing halaman detail penuh */
-        #page-hyperion:checked ~ #detail-hyperion,
-        #page-hyprphantom:checked ~ #detail-hyprphantom,
-        #page-glitter:checked ~ #detail-glitter,
-        #page-twincore:checked ~ #detail-twincore,
-        #page-silencex1:checked ~ #detail-silencex1,
-        #page-silencex2:checked ~ #detail-silencex2,
-        #page-dandelion:checked ~ #detail-dandelion,
-        #page-silencep1:checked ~ #detail-silencep1,
-        #page-silencep2:checked ~ #detail-silencep2 {
-            display: block !important; /* Tampilkan Detail Penuh */
-        }
-
-        /* LOGIKA FILTER KATEGORI KATALOG */
-        #tab-x86:checked ~ .page-katalog #hp {
-            display: none !important;
-        }
-        #tab-arm:checked ~ .page-katalog #laptop {
-            display: none !important;
-        }
-
-        #tab-semua:checked ~ header nav .lbl-semua,
-        #tab-x86:checked ~ header nav .lbl-x86,
-        #tab-arm:checked ~ header nav .lbl-arm {
-            background-color: #007bff;
-        }
-
-        /* -------------------------------------------------- */
-        /* HEADER & NAVIGASI                                  */
-        /* -------------------------------------------------- */
-        header {
-            background-color: #1a1a1a;
-            color: white;
-            padding: 15px 0;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
-        header h1 { margin: 0; font-size: 24px; padding-bottom: 10px; }
-        
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        nav label.nav-btn {
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: 0.3s;
-            background-color: #333;
-            cursor: pointer;
-            user-select: none;
-            display: inline-block;
-        }
-        nav label.nav-btn:hover {
-            background-color: #007bff;
-        }
-
-        /* KONTAINER & GRID KATALOG */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-            min-height: 65vh;
-        }
-
-        .category-section {
-            margin-bottom: 50px;
-            padding-top: 20px;
-        }
-        .category-title {
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 10px;
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 30px 20px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 150px;
-        }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        }
-        .card h3 { margin: 0 0 10px 0; font-size: 1.3rem; color: #1a1a1a; }
-        .card p { color: #666; font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
-        
-        .btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: inline-block;
-            width: 80%;
-            font-weight: bold;
-            transition: 0.2s;
-            margin: 0 auto;
-            text-align: center;
-            user-select: none;
-        }
-        .btn:hover { background-color: #218838; }
-
-        /* -------------------------------------------------- */
-        /* DESAIN FULL HALAMAN BARU (DETAIL VIEW)             */
-        /* -------------------------------------------------- */
-        .detail-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            padding: 40px 30px;
-            margin-top: 20px;
-        }
-
-        .badge {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .detail-card h2 {
-            margin: 0 0 10px 0;
-            font-size: 2.2rem;
-            color: #1a1a1a;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 15px;
-            font-weight: 600;
-        }
-
-        /* Teks deskripsi bersih tanpa garis/kotak biru */
-        .info-content h4 {
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
-            color: #1a1a1a;
-        }
-
-        .info-content p {
-            margin: 0;
-            color: #555;
-            line-height: 1.7;
-        }
-
-        .btn-kembali {
-            background-color: #6c757d;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            user-select: none;
-            display: inline-block;
-            transition: 0.2s;
-        }
-        .btn-kembali:hover { background-color: #5a6268; }
-
-        /* FOOTER */
-        footer {
-            background-color: #1a1a1a;
-            color: #ccc;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
-        }
-    </style>
+    <title>Neverness to Everness</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- CONTROL PINDAH HALAMAN (PAGE SWITCH) -->
-    <input type="radio" id="view-katalog" name="page-switch" class="radio-switch" checked>
-    <input type="radio" id="page-hyperion" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-hyprphantom" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-glitter" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-twincore" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-silencex1" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-silencex2" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-dandelion" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-silencep1" name="page-switch" class="radio-switch">
-    <input type="radio" id="page-silencep2" name="page-switch" class="radio-switch">
+    <!-- OVERLAY LOGIN -->
+    <div id="login-screen">
+        <div class="login-card">
+            <h2>Masuk ke Website</h2>
+            <p>Masukkan password untuk mengakses.</p>
+            <input type="password" id="input-pass" class="login-input" placeholder="Password" autofocus>
+            <button type="button" id="btn-masuk" class="btn-login">Masuk</button>
+            <div id="error-msg" class="error-msg">Password salah! Silakan coba lagi.</div>
+        </div>
+    </div>
 
-    <!-- CONTROL FILTER KATEGORI KATALOG -->
-    <input type="radio" id="tab-semua" name="kategori" class="radio-switch" checked>
-    <input type="radio" id="tab-x86" name="kategori" class="radio-switch">
-    <input type="radio" id="tab-arm" name="kategori" class="radio-switch">
-
-    <header>
-        <h1>Device Category</h1>
-        <nav>
-            <ul>
-                <li><label for="tab-semua" class="nav-btn lbl-semua">Semua</label></li>
-                <li><label for="tab-x86" class="nav-btn lbl-x86">X86</label></li>
-                <li><label for="tab-arm" class="nav-btn lbl-arm">ARM</label></li>
+    <!-- OVERLAY & SIDEBAR MENU (GARIS 3) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div>
+            <button type="button" class="close-sidebar" id="close-sidebar">&times;</button>
+            <h2>Menu Utama</h2>
+            <ul class="sidebar-menu">
+                <li><button type="button" class="sidebar-item active" data-action="device">💻 Device (Halaman Utama)</button></li>
+                <li><button type="button" class="sidebar-item" data-action="storage">💾 Storage (Halaman Kedua)</button></li>
+                <li><button type="button" class="sidebar-item" data-action="setup">⚙️ Setup (Halaman Ketiga)</button></li>
             </ul>
-        </nav>
-    </header>
-
-    <!-- ==================================================== -->
-    <!-- TAMPILAN 1: HALAMAN UTAMA / KATALOG PRODUK           -->
-    <!-- ==================================================== -->
-    <div class="container page-katalog">
-        
-        <!-- KATEGORI 1: X86 -->
-        <section id="laptop" class="category-section">
-            <h2 class="category-title">Kategori: X86</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Hyperion</h3>
-                    <p>Desktop Computer</p>
-                    <label for="page-hyperion" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>HyprPhantom</h3>
-                    <p>Laptop</p>
-                    <label for="page-hyprphantom" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>Glitter</h3>
-                    <p>NGGR</p>
-                    <label for="page-glitter" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>Twin Core</h3>
-                    <p>Retro</p>
-                    <label for="page-twincore" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>SilenceX1</h3>
-                    <p>Silence</p>
-                    <label for="page-silencex1" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>SilenceX2</h3>
-                    <p>Silence</p>
-                    <label for="page-silencex2" class="btn">Lanjutkan</label>
-                </div>
-            </div>
-        </section>
-
-        <!-- KATEGORI 2: ARM -->
-        <section id="hp" class="category-section">
-            <h2 class="category-title">Kategori: ARM</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Dandelion</h3>
-                    <p>Redmi 10A</p>
-                    <label for="page-dandelion" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>SilenceP1</h3>
-                    <p>ARM version</p>
-                    <label for="page-silencep1" class="btn">Lanjutkan</label>
-                </div>
-                <div class="card">
-                    <h3>SilenceP2</h3>
-                    <p>VA</p>
-                    <label for="page-silencep2" class="btn">Lanjutkan</label>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- ==================================================== -->
-    <!-- TAMPILAN 2: DAFTAR HALAMAN BARU / DETAIL PRODUK      -->
-    <!-- ==================================================== -->
-
-    <!-- Halaman Detail: Hyperion -->
-    <div class="container page-detail" id="detail-hyperion">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: X86</span>
-            <h2>Hyperion</h2>
-            <div class="subtitle">Tipe: Desktop Computer</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Hyperion adalah komputer desktop kelas profesional dengan performa arsitektur X86 yang tinggi. Dirancang untuk menangani beban kerja berat, pengolahan data masif, multitasking intensif, serta komputasi harian yang membutuhkan stabilitas maksimal.</p>
-            </div>
+        </div>
+        <div>
+            <button type="button" class="sidebar-item" id="sidebar-logout" style="color: #ef4444;">🚪 Keluar (Logout)</button>
         </div>
     </div>
 
-    <!-- Halaman Detail: HyprPhantom -->
-    <div class="container page-detail" id="detail-hyprphantom">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: X86</span>
-            <h2>HyprPhantom</h2>
-            <div class="subtitle">Tipe: Laptop</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>HyprPhantom hadir dalam bentuk laptop ultra-portabel berbasis X86. Menawarkan keseimbangan sempurna antara mobilitas tinggi, efisiensi daya, dan kemampuan pemrosesan yang tangguh untuk mendukung produktivitas Anda di mana saja.</p>
+    <div id="main-content">
+        <header id="main-header">
+            <button type="button" class="menu-btn" id="open-sidebar" aria-label="Menu">&#9776;</button>
+            <h1 id="header-title">Category : Device</h1>
+            <div class="header-controls">
+                <input type="text" id="search-input" class="search-box" placeholder="Cari item...">
+                <nav>
+                    <ul>
+                        <li><button type="button" class="nav-btn active" data-tab="semua">Semua</button></li>
+                        <li><button type="button" class="nav-btn" data-tab="x86">X86</button></li>
+                        <li><button type="button" class="nav-btn" data-tab="arm">ARM</button></li>
+                        <li><button type="button" class="btn-logout" id="btn-logout">Keluar</button></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- HALAMAN UTAMA: DEVICE -->
+        <div class="container page-main-view" id="page-device">
+            <section id="sec-device-x86" class="category-section">
+                <h2 class="category-title">Divisi : X86</h2>
+                <div class="grid">
+                    <div class="card" data-title="hyprphantom" data-category="x86"><div><h3>HyprPhantom</h3><p>Custom Desktop</p></div><button class="btn-lanjut" data-target="detail-hyperphantom">Lanjutkan</button></div>
+                    <div class="card" data-title="hyprstealth" data-category="x86"><div><h3>HyprStealth</h3><p>HP 14s fq-1035AU</p></div><button class="btn-lanjut" data-target="detail-hyprstealth">Lanjutkan</button></div>
+                    <div class="card" data-title="skyhawk" data-category="x86"><div><h3>SkyHawk</h3><p>Toshiba Satellite L745</p></div><button class="btn-lanjut" data-target="skyhawk">Lanjutkan</button></div>
+                    <div class="card" data-title="ivy" data-category="x86"><div><h3>Nano Helios</h3><p>Acer Aspire 4520</p></div><button class="btn-lanjut" data-target="detail-helios">Lanjutkan</button></div>
+                    <div class="card" data-title="silencex1" data-category="x86"><div><h3>SilenceX1</h3><p>Toshiba NB510</p></div><button class="btn-lanjut" data-target="detail-silencex1">Lanjutkan</button></div>
+                    <div class="card" data-title="silencex2 refresh" data-category="x86"><div><h3>SilenceX2 (Refresh)</h3><p>Dell Optiplex 5040 (MT)</p></div><button class="btn-lanjut" data-target="detail-silencex2 refresh">Lanjutkan</button></div>
+                </div>
+            </section>
+            <section id="sec-device-arm" class="category-section">
+                <h2 class="category-title">Divisi : ARM</h2>
+                <div class="grid">
+                    <div class="card" data-title="dandelion" data-category="arm"><div><h3>Dandelion</h3><p>Redmi 10A</p></div><button class="btn-lanjut" data-target="detail-dandelion">Lanjutkan</button></div>
+                    <div class="card" data-title="silencep1" data-category="arm"><div><h3>SilenceP1</h3><p>Samsung Galaxy J7 Pro</p></div><button class="btn-lanjut" data-target="detail-silencep1">Lanjutkan</button></div>
+                    <div class="card" data-title="silencep2" data-category="arm"><div><h3>SilenceP2</h3><p>Samsung Galaxy J5</p></div><button class="btn-lanjut" data-target="detail-silencep2">Lanjutkan</button></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN KEDUA: STORAGE -->
+        <div class="container page-main-view" id="page-storage" style="display: none;">
+            <section id="sec-storage-x86" class="category-section">
+                <h2 class="category-title">Divisi : High Performance Storage (X86)</h2>
+                <div class="grid">
+                    <div class="card" data-title="team t-force g50 ssd nvme 512gb" data-category="x86"><div><h3>Team T-Force G50</h3><p>512GB PCIe 4.0 NVMe SSD</p></div><button class="btn-lanjut" data-target="detail-storage-tforce">Lanjutkan</button></div>
+                    <div class="card" data-title="adata legend 710 nvme 512gb" data-category="x86"><div><h3>ADATA Legend 710</h3><p>512GB PCIe 3.0 NVMe SSD</p></div><button class="btn-lanjut" data-target="detail-storage-adata">Lanjutkan</button></div>
+                    <div class="card" data-title="seagate firecuda sshd 750gb" data-category="x86"><div><h3>Seagate FireCuda</h3><p>750GB SSHD 2.5 Inch</p></div><button class="btn-lanjut" data-target="detail-storage-seagate">Lanjutkan</button></div>
+                    <div class="card" data-title="wd green black ssd hdd 2.5" data-category="x86"><div><h3>WD Green & Black</h3><p>256GB SSD + 500GB HDD 2.5</p></div><button class="btn-lanjut" data-target="detail-storage-wd">Lanjutkan</button></div>
+                </div>
+            </section>
+            <section id="sec-storage-arm" class="category-section">
+                <h2 class="category-title">Divisi : Mobile & Flash Storage (ARM)</h2>
+                <div class="grid">
+                    <div class="card" data-title="internal emmc flash 32gb 16gb" data-category="arm"><div><h3>Internal eMMC Flash</h3><p>32GB / 16GB Storage Unit</p></div><button class="btn-lanjut" data-target="detail-storage-emmc">Lanjutkan</button></div>
+                    <div class="card" data-title="microsd expansion card" data-category="arm"><div><h3>MicroSD Expansion</h3><p>External Mobile Storage</p></div><button class="btn-lanjut" data-target="detail-storage-microsd">Lanjutkan</button></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN KETIGA: SETUP -->
+        <div class="container page-main-view" id="page-setup" style="display: none;">
+            <section id="sec-setup-x86" class="category-section">
+                <h2 class="category-title">Divisi : Desktop & Laptop Setup (X86)</h2>
+                <div class="grid">
+                    <div class="card" data-title="arch linux hyprland tiling wm" data-category="x86"><div><h3>Arch Linux + Hyprland</h3><p>Custom Wayland Tiling Setup</p></div><button class="btn-lanjut" data-target="detail-setup-hyprland">Lanjutkan</button></div>
+                    <div class="card" data-title="windows 11 debloat ghost spectre" data-category="x86"><div><h3>Windows 11 Debloat</h3><p>Optimized Lightweight Setup</p></div><button class="btn-lanjut" data-target="detail-setup-win11">Lanjutkan</button></div>
+                    <div class="card" data-title="cachyos nobara linux gaming" data-category="x86"><div><h3>CachyOS & Nobara</h3><p>Gaming Performance Setup</p></div><button class="btn-lanjut" data-target="detail-setup-linuxgame">Lanjutkan</button></div>
+                    <div class="card" data-title="windows xp 32-bit retro setup" data-category="x86"><div><h3>Windows XP 32-bit</h3><p>Retro Gaming Environment</p></div><button class="btn-lanjut" data-target="detail-setup-winxp">Lanjutkan</button></div>
+                </div>
+            </section>
+            <section id="sec-setup-arm" class="category-section">
+                <h2 class="category-title">Divisi : Mobile System Setup (ARM)</h2>
+                <div class="grid">
+                    <div class="card" data-title="android 11 miui debloated" data-category="arm"><div><h3>MIUI 12.5 Debloated</h3><p>Android 11 Mobile Setup</p></div><button class="btn-lanjut" data-target="detail-setup-miui">Lanjutkan</button></div>
+                    <div class="card" data-title="stock android exynos snapdragon" data-category="arm"><div><h3>Stock Android System</h3><p>Lightweight Legacy Mobile</p></div><button class="btn-lanjut" data-target="detail-setup-stock">Lanjutkan</button></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HALAMAN DETAIL STORAGE -->
+        <div class="container page-detail" id="detail-storage-tforce">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Storage</button>
+            <div class="detail-card"><span class="badge">NVMe Storage</span>
+                <h2>Team T-Force G50</h2><p>Penyimpanan SSD High Speed PCIe 4.0 untuk performa maksimal pada HyprPhantom.</p>
+                <table class="spec-table"><tr><td>Kapasitas</td><td>512 GB</td></tr><tr><td>Interface</td><td>PCIe Gen 4.0 x4 NVMe</td></tr><tr><td>Fungsi</td><td>System Primary OS Drive</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: Glitter -->
-    <div class="container page-detail" id="detail-glitter">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: X86</span>
-            <h2>Glitter</h2>
-            <div class="subtitle">Tipe: NGGR</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Perangkat Next-Gen (NGGR) berbasis X86 yang mengedepankan kecepatan eksekusi tinggi, efisiensi render grafis, serta fleksibilitas konektivitas tingkat lanjut.</p>
+        <div class="container page-detail" id="detail-storage-adata">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Storage</button>
+            <div class="detail-card"><span class="badge">NVMe Storage</span>
+                <h2>ADATA Legend 710</h2><p>Penyimpanan SSD PCIe 3.0 cepat dan stabil untuk data secondary.</p>
+                <table class="spec-table"><tr><td>Kapasitas</td><td>512 GB</td></tr><tr><td>Interface</td><td>PCIe Gen 3.0 x4 NVMe</td></tr><tr><td>Fungsi</td><td>Data & Game Storage Drive</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: Twin Core -->
-    <div class="container page-detail" id="detail-twincore">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: X86</span>
-            <h2>Twin Core</h2>
-            <div class="subtitle">Tipe: Retro</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Sistem arsitektur dual-core X86 klasik yang sangat stabil. Sangat cocok digunakan untuk menjalankan sistem operasi legacy, emulator retro, atau tugas-tugas komputasi mendasar yang membutuhkan konsistensi tanpa gangguan.</p>
+        <div class="container page-detail" id="detail-storage-seagate">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Storage</button>
+            <div class="detail-card"><span class="badge">SSHD Storage</span>
+                <h2>Seagate FireCuda 2.5"</h2><p>Hybrid Hard Drive dengan cache NAND Flash untuk akses data cepat.</p>
+                <table class="spec-table"><tr><td>Kapasitas</td><td>750 GB</td></tr><tr><td>Interface</td><td>SATA 3.0 6Gb/s</td></tr><tr><td>Fungsi</td><td>Mass Storage & Archiving</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: SilenceX1 -->
-    <div class="container page-detail" id="detail-silencex1">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: X86</span>
-            <h2>SilenceX1</h2>
-            <div class="subtitle">Tipe: Silence</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Perangkat PC Fanless (tanpa kipas) berbasis X86 generasi pertama. Dilengkapi dengan pendinginan pasif tingkat tinggi untuk pengoperasian yang 100% hening dan bebas kebisingan suara kipas.</p>
+        <div class="container page-detail" id="detail-storage-wd">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Storage</button>
+            <div class="detail-card"><span class="badge">SATA Drive</span>
+                <h2>WD Green & Black Combination</h2><p>SATA SSD 256GB WD Green dipadukan HDD WD Black 500GB untuk SilenceX2.</p>
+                <table class="spec-table"><tr><td>SSD WD Green</td><td>256 GB SATA 2.5"</td></tr><tr><td>HDD WD Black</td><td>500 GB SATA 2.5"</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: SilenceX2 -->
-    <div class="container page-detail" id="detail-silencex2">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: X86</span>
-            <h2>SilenceX2</h2>
-            <div class="subtitle">Tipe: Silence</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Peningkatan dari seri SilenceX1, membawa arsitektur X86 yang lebih bertenaga namun tetap mengusung sistem *silent cooling* pasif untuk menciptakan lingkungan kerja yang hening total.</p>
+        <div class="container page-detail" id="detail-storage-emmc">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Storage</button>
+            <div class="detail-card"><span class="badge">ARM Storage</span>
+                <h2>Internal eMMC Flash</h2><p>Penyimpanan flash bawaan SoC pada unit mobile ARM.</p>
+                <table class="spec-table"><tr><td>Dandelion (Redmi 10A)</td><td>32 GB eMMC</td></tr><tr><td>SilenceP2 (J5)</td><td>16 GB eMMC</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: Dandelion -->
-    <div class="container page-detail" id="detail-dandelion">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: ARM</span>
-            <h2>Dandelion</h2>
-            <div class="subtitle">Tipe: Redmi 10A</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Perangkat seluler berbasis SoC ARM (Redmi 10A). Mengutamakan efisiensi konsumsi baterai harian, layar besar, dan kapabilitas aplikasi mobile yang ringan serta stabil.</p>
+        <div class="container page-detail" id="detail-storage-microsd">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Storage</button>
+            <div class="detail-card"><span class="badge">External Storage</span>
+                <h2>MicroSD Card Expansion</h2><p>Ekspansi memori eksternal untuk perangkat portabel.</p>
+                <table class="spec-table"><tr><td>Dukungan Format</td><td>MicroSDHC / MicroSDXC</td></tr><tr><td>Penggunaan</td><td>Ekspansi Data Media Mobile</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: SilenceP1 -->
-    <div class="container page-detail" id="detail-silencep1">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: ARM</span>
-            <h2>SilenceP1</h2>
-            <div class="subtitle">Tipe: ARM version</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Perangkat arsitektur ARM hemat energi tingkat lanjut. Menghasilkan suhu kerja yang sangat dingin dan penggunaan daya minimal untuk aktivitas komputasi seluler berdurasi panjang.</p>
+        <!-- HALAMAN DETAIL SETUP -->
+        <div class="container page-detail" id="detail-setup-hyprland">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Setup</button>
+            <div class="detail-card"><span class="badge">Linux Setup</span>
+                <h2>Arch Linux + Hyprland</h2><p>Konfigurasi Dynamic Tiling Wayland Compositor dengan animasi halus dan fleksibilitas tinggi.</p>
+                <table class="spec-table"><tr><td>Distro</td><td>Arch Linux / CachyOS</td></tr><tr><td>Compositor</td><td>Hyprland (Wayland)</td></tr><tr><td>Perangkat Utama</td><td>HyprPhantom & HyprStealth</td></tr></table>
             </div>
         </div>
-    </div>
 
-    <!-- Halaman Detail: SilenceP2 -->
-    <div class="container page-detail" id="detail-silencep2">
-        <label for="view-katalog" class="btn-kembali">&laquo; Kembali ke Katalog</label>
-        <div class="detail-card">
-            <span class="badge">Arsitektur: ARM</span>
-            <h2>SilenceP2</h2>
-            <div class="subtitle">Tipe: VA</div>
-            <div class="info-content">
-                <h4>Deskripsi & Spesifikasi Produk</h4>
-                <p>Perangkat ARM generasi terbaru bertipe VA yang menyajikan pengolahan visual lebih responsif, instruksi data hemat daya, dan performa yang sangat dapat diandalkan.</p>
+        <div class="container page-detail" id="detail-setup-win11">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Setup</button>
+            <div class="detail-card"><span class="badge">Windows Setup</span>
+                <h2>Windows 11 Debloated</h2><p>Windows 11 yang telah dioptimasi dengan menghapus telemetry dan bloatware untuk performa ringan.</p>
+                <table class="spec-table"><tr><td>Varian OS</td><td>Ghost Spectre / Chris Titus Debloat</td></tr><tr><td>Kelebihan</td><td>Penggunaan RAM & CPU Sangat Rendah</td></tr></table>
             </div>
         </div>
+
+        <div class="container page-detail" id="detail-setup-linuxgame">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Setup</button>
+            <div class="detail-card"><span class="badge">Gaming Setup</span>
+                <h2>CachyOS & Nobara Gaming</h2><p>Distro Linux yang dioptimasi secara khusus untuk kompilasi CPU dan kompatibilitas game Proton.</p>
+                <table class="spec-table"><tr><td>CachyOS</td><td>Kernel x86-64-v3 Optimized</td></tr><tr><td>Nobara Linux</td><td>Gnome / Custom Gaming Patches</td></tr></table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-setup-winxp">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Setup</button>
+            <div class="detail-card"><span class="badge">Legacy Setup</span>
+                <h2>Windows XP 32-bit Setup</h2><p>Lingkungan eksekusi klasik untuk game era 2006 ke bawah pada Nano Helios.</p>
+                <table class="spec-table"><tr><td>Architecture</td><td>32-bit (x86)</td></tr><tr><td>Target Machine</td><td>Nano Helios (Turion 64)</td></tr></table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-setup-miui">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Setup</button>
+            <div class="detail-card"><span class="badge">Mobile Setup</span>
+                <h2>MIUI 12.5 Debloated</h2><p>Sistem operasi Android 11 berbasis MIUI yang telah dibersihkan dari aplikasi sistem non-esensial.</p>
+                <table class="spec-table"><tr><td>Base OS</td><td>Android 11</td></tr><tr><td>Target Machine</td><td>Dandelion (Redmi 10A)</td></tr></table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-setup-stock">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Setup</button>
+            <div class="detail-card"><span class="badge">Mobile Setup</span>
+                <h2>Stock Legacy Android</h2><p>Sistem Android bawaan pabrik untuk unit ARM legacy.</p>
+                <table class="spec-table"><tr><td>SilenceP1</td><td>Samsung Exynos 7870 System</td></tr><tr><td>SilenceP2</td><td>Snapdragon MSM 8916 System</td></tr></table>
+            </div>
+        </div>
+
+        <!-- HALAMAN DETAIL DEVICE -->
+        <div class="container page-detail" id="detail-hyperphantom">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">X86 Custom Desktop</span>
+                <h2>HyprPhantom</h2><p>Unit-00, Desktop PC Custom dengan Processor AMD Ryzen 5 dan Graphic Card RX 6700 XT, kombinasi sempurna antara CPU dan GPU AMD dengan spek price-performance. Spek lengkap nya sebagai berikut:</p>
+                <table class="spec-table">
+                    <tr><td>CPU</td><td>AMD Ryzen 5 5600</td></tr><tr><td>GPU</td><td>XFX SPEEDSTER QICK 319 RX 6700 XT</td></tr>
+                    <tr><td>Chipset</td><td>B550M</td></tr><tr><td>RAM</td><td>~Team T-Create Expert 16GB DDR4 3600MHz ×2 ~G.Skill Ripjaws V 16GB DDR4 3200MHz ×2</td></tr>
+                    <tr><td>SSD-1</td><td>Team T-Force G50 512GB 4.0</td></tr><tr><td>SSD-2</td><td>ADATA Legend 710 512GB 3.0</td></tr>
+                    <tr><td>SSHD</td><td>Seagate FireCuda 750GB 2.5</td></tr><tr><td>PSU</td><td>be quiet! PURE ROCK 13 M 750W 80+ Gold</td></tr>
+                    <tr><td>Mobo</td><td>ASRock B550M PRO4</td></tr><tr><td>Casing</td><td>Paradox Gaming Grimreaper Black</td></tr>
+                </table>
+                <h2>Operating System</h2><p>HyperPhantom menggunakan 5 Operating System (OS) sekaligus. Diantaranya:</p>
+                <table class="spec-table">
+                    <tr><td>OS-1</td><td>Windows 11 Full Debloat (T-Force)</td></tr><tr><td>OS-2</td><td>Arch Linux + Hyprland (T-Force)</td></tr>
+                    <tr><td>OS-3</td><td>CachyOS + HyprLand (T-Force)</td></tr><tr><td>OS-4</td><td>Ubuntu + KDE Plasma (T-Force)</td></tr>
+                    <tr><td>OS-5</td><td>Prime OS (T-Force)</td></tr>
+                </table>
+                <p>NB: HyperGraph</p>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-hyprstealth">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">X86 Laptop</span>
+                <h2>HyprStealth</h2><p>Unit-01, Device dengan penggunaan daya sangat sedikit tetapi performanya tetap kuat. Dibekali dengan Processor AMD Ryzen 5 5500U, seri U adalah seri hemat daya akan tetapi performanya dipangkas.</p>
+                <table class="spec-table">
+                    <tr><td>CPU</td><td>AMD Ryzen 5500U</td></tr><tr><td>GPU</td><td>AMD Radeon RX Vega 7 (iGPU)</td></tr>
+                    <tr><td>RAM</td><td>Crucial 16GB DDR4 3200MHz ×2</td></tr><tr><td>SSD</td><td>Team Group 512GB 3.0</td></tr>
+                    <tr><td>PSU</td><td>HP 19V 3.42A (65W)</td></tr><tr><td>Other</td><td>Based HP 14s fq1035AU</td></tr>
+                </table>
+                <h2>Operating System</h2><p>Menggunakan 3 OS Diantaranya:</p>
+                <table class="spec-table">
+                    <tr><td>OS-1</td><td>Windows 11 Ghost Spectre Super lite</td></tr><tr><td>OS-2</td><td>Arch Linux + Hyprland</td></tr>
+                    <tr><td>OS-3</td><td>Nobara Linux + Gnome</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="skyhawk">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">X86 Laptop</span>
+                <h2>SkyHawk</h2><p>Unit-04</p>
+                <table class="spec-table">
+                    <tr><td>CPU</td><td>Intel® Core i3-2310M</td></tr><tr><td>GPU</td><td>Intel® HD Graphic 3000 (iGPU)</td></tr>
+                    <tr><td>Chipset</td><td>Q75</td></tr><tr><td>RAM</td><td>Elpida 8GB DDR3L 1600MHz ×2</td></tr>
+                    <tr><td>HDD</td><td>Toshiba 500GB 2.5</td></tr><tr><td>PSU</td><td>Toshiba (Chicony) 19V 3.42A (65W)</td></tr>
+                    <tr><td>Other</td><td>Based Toshiba Satellite L745</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-helios">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">X86 Laptop</span>
+                <h2>Nano Helios</h2><p>Unit-03, Device untuk retro game 2006 kebawah. Memiliki kekurangan seperti GPU ada di chipset yang sangat lemah, Chip South Bridge, dan Chip North Bridge digabung sehingga Chipset nya sangat panas</p>
+                <table class="spec-table">
+                    <tr><td>CPU</td><td>AMD Turion 64 x2</td></tr><tr><td>GPU</td><td>Nvidia GeForce 7000M (Chipset GPU)</td></tr>
+                    <tr><td>Chipset</td><td>nForce 610</td></tr><tr><td>RAM</td><td>SK Hynix 4GB DDR2 800MHz ×2</td></tr>
+                    <tr><td>Storage</td><td>Seagate Barracuda 500GB 2.5</td></tr>
+                </table>
+                <h2>Operating System</h2><p>Karena sudah support 64-bit Ivy bisa menggunakan Linux dengan optimal</p>
+                <table class="spec-table">
+                    <tr><td>OS-1</td><td>Windows XP 32-bit</td></tr><tr><td>OS-2</td><td>Arch Linux + i3wm</td></tr>
+                    <tr><td>OS-3</td><td>Void Linux (CLI)</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-silencex1">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">X86 Notebook</span>
+                <h2>SilenceX1</h2><p>Unit-05. Ringkas, hemat daya. CPU support 64-bit, tapi performa 64-bit nya kurang optimal sehingga hanya bisa pakai OS 32-bit</p>
+                <table class="spec-table">
+                    <tr><td>CPU</td><td>Intel® Atom N2800</td></tr><tr><td>GPU</td><td>Intel® GMA xxxx</td></tr>
+                </table>
+                <h2>Operating System</h2><p>Karena hanya support 32-bit SilenceX1 hanya menggunakan 1 OS yaitu:</p>
+                <table class="spec-table">
+                    <tr><td>OS</td><td>Windows 7 Home 32-bit</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-silencex2 refresh">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">X86 OEM Desktop</span>
+                <h2>SilenceX2</h2><p>Unit-02. Versi Refresh, memiliki performa dan konsumsi daya yang seimbang</p>
+                <table class="spec-table">
+                    <tr><td>CPU</td><td>Intel® Core i3 6100T</td></tr><tr><td>GPU</td><td>Intel® HD Graphic 510</td></tr>
+                    <tr><td>Chipset</td><td>Q175</td></tr><tr><td>RAM</td><td>HyperX Fury DDR3L 16GB 1600MHz ×2</td></tr>
+                    <tr><td>SSD</td><td>WD Green 256GB 2.5</td></tr><tr><td>HDD</td><td>WD Black 500GB 2.5</td></tr>
+                    <tr><td>PSU</td><td>Dell (Delta) 320W</td></tr><tr><td>Mobo</td><td>Dell Q175 Custom</td></tr>
+                    <tr><td>Casing</td><td>Dell Optiplex 5040 MT</td></tr>
+                </table>
+                <h2>Operating System</h2>
+                <table class="spec-table">
+                    <tr><td>OS-1</td><td>Windows 11 Chris Titus Debloat</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="container page-detail" id="detail-dandelion">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">ARM</span>
+                <h2>Dandelion</h2><p>Unit-06. Device Portable harian dan hemat daya. Menggunakan Mediatek Helio G25 yang support 64-bit tapi berjalan di 32-bit</p>
+                <table class="spec-table">
+                    <tr><td>SoC</td><td>MediaTek Helio G25</td></tr><tr><td>GPU</td><td>PowerVR xxxx</td></tr>
+                    <tr><td>RAM</td><td>3GB</td></tr><tr><td>OS</td><td>Android 11 (MIUI 12.5.6) Debloat)</td></tr>
+                </table>
+                <p>Rezz</p>
+            </div>
+        </div>
+
+<div class="container page-detail" id="detail-silencep2">
+            <button class="btn-kembali">&laquo; Kembali ke Katalog Device</button>
+            <div class="detail-card"><span class="badge">ARM</span>
+                <h2>SilenceP2</h2><p>Unit-08.</p>
+                <table class="spec-table">
+                    <tr><td>SoC</td><td>Qualcomm Snapdragon MSM 8916</td></tr><tr><td>GPU</td><td>Adreno RX7</td></tr>
+                    <tr><td>RAM</td><td>2GB</td></tr><tr><td>Storage</td><td>16GB (eMMC)</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <footer><p>&copy; 2026 HyperGraph.</p></footer>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Device. Noveau.</p>
-    </footer>
-
+    <script src="script.js"></script>
 </body>
-  </html>
-  
+</html>
