@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Category</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #0b0f1a 0%, #121826 100%);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1a1f2e;
+      padding: 15px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .navbar h1 {
+      font-size: 22px;
+      margin: 0;
+      color: #1e5eff;
+    }
+    .hamburger {
+      font-size: 28px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #fff;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+      background: #121826;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .menu a {
+      padding: 12px 20px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    .menu a:hover {
+      background: #1e5eff;
+    }
+    .menu.show {
+      display: flex;
+    }
+
+    /* Search bar */
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 600px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+      background-color: #1a1f2e;
+      color: #fff;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    /* Kategori */
+    .categories {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .categories button {
+      padding: 12px 30px;
+      border-radius: 25px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #1a1f2e;
+      color: #ccc;
+      transition: 0.3s;
+    }
+    .categories button.active {
+      background-color: #1e5eff;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(30,94,255,0.6);
+    }
+
+    /* Card perangkat */
+    .device-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto 60px;
+    }
+    .card {
+      background-color: #f5f6fa;
+      color: #000;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .card p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 15px;
+    }
+    .card a {
+      display: block;
+      text-align: center;
+      background-color: #1e5eff;
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 16px;
+      text-decoration: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 25px 0;
+      background: #1a1f2e;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.4);
+      width: 100%;
+      margin-top: auto;
+      border-top: 2px solid #1e5eff;
+    }
+
+    @media (max-width: 480px) {
+      .navbar h1 { font-size: 20px; }
+      .categories button { font-size: 14px; padding: 10px 20px; }
+      .card h2 { font-size: 20px; }
+      .card p { font-size: 14px; }
+      .card a { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar dengan hamburger -->
+  <div class="navbar">
+    <h1>HyperGraph</h1>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <div class="menu" id="menu">
+      <a href="index.html">Home</a>
+      <a href="category.html">Category</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchBox" placeholder="Cari perangkat...">
+  </div>
+
+  <div class="categories">
+    <button class="active" onclick="filterCategory('all')">Semua</button>
+    <button onclick="filterCategory('x86')">X86</button>
+    <button onclick="filterCategory('arm')">ARM</button>
+  </div>
+
+  <div class="device-list" id="deviceList">
+    <div class="card" data-kategori="x86">
+      <h2>SilenceP1</h2>
+      <p>Samsung Galaxy J7 Pro</p>
+      <a href="detail-silencep1.html">Lanjutkan</a>
+    </div>
+    <div class="card" data-kategori="arm">
+      <h2>SilenceP2</h2>
+      <p>Samsung Galaxy J5</p>
+      <a href="detail-silencep2.html">Lanjutkan</a>
+    </div>
+    <!-- Tambahkan hingga 9 perangkat -->
+  </div>
+
+  <footer>© 2026 HyperGraph.</footer>
+
+  <script>
+    const searchBox = document.getElementById('searchBox');
+    const cards = document.querySelectorAll('.card');
+    let currentFilter = 'all';
+
+    function toggleMenu() {
+      document.getElementById('menu').classList.toggle('show');
+    }
+
+    function filterCategory(kategori) {
+      currentFilter = kategori;
+      document.querySelectorAll('.categories button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      applyFilters();
+    }
+
+    searchBox.addEventListener('input', applyFilters);
+
+    function applyFilters() {
+      const query = searchBox.value.toLowerCase();
+      cards.forEach(card => {
+        const matchSearch = card.innerText.toLowerCase().includes(query);
+        const matchCategory = currentFilter === 'all' || card.dataset.kategori === currentFilter;
+        card.style.display = (matchSearch && matchCategory) ? 'block' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>
