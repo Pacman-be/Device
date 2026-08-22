@@ -1,0 +1,54 @@
+<!-- detail-silencep1.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Detail SilenceP1</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0b0f1a;
+      color: #fff;
+      margin: 0;
+      padding: 40px;
+    }
+    .detail-card {
+      background: #1a1f2e;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #1e5eff;
+    }
+    p {
+      font-size: 18px;
+      margin: 8px 0;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #1e5eff;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="detail-card">
+    <h2>SilenceP1</h2>
+    <p>Model: Samsung Galaxy J7 Pro</p>
+    <p>CPU: Exynos 7870</p>
+    <p>GPU: Mali-T830 MP1</p>
+    <p>RAM: 3GB</p>
+    <p>Storage: 32GB</p>
+    <a href="index.html">← Kembali</a>
+  </div>
+</body>
+</html>
